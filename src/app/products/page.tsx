@@ -49,6 +49,16 @@ interface Product {
   category?: string;
 }
 
+interface NewProductForm {
+  name: string;
+  sku: string;
+  price: string;
+  description: string;
+  stock: string;
+  category: string;
+  images: string[];
+}
+
 const products: Product[] = [
   {
     id: 1,
@@ -330,12 +340,12 @@ export default function ProductsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [hoveredCardId, setHoveredCardId] = useState<number | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [newProduct, setNewProduct] = useState<Partial<Product>>({
+  const [newProduct, setNewProduct] = useState<NewProductForm>({
     name: "",
     sku: "",
-    price: 0,
+    price: "",
     description: "",
-    stock: 0,
+    stock: "",
     category: "",
     images: [],
   });
@@ -413,15 +423,20 @@ export default function ProductsPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Aquí iría la lógica para guardar el producto
-    console.log("Nuevo producto:", newProduct);
+    // Convertir los valores string a number para price y stock
+    const productToSave: Partial<Product> = {
+      ...newProduct,
+      price: parseFloat(newProduct.price) || 0,
+      stock: parseInt(newProduct.stock) || 0,
+    };
+    console.log("Nuevo producto:", productToSave);
     setDialogOpen(false);
     setNewProduct({
       name: "",
       sku: "",
-      price: 0,
+      price: "",
       description: "",
-      stock: 0,
+      stock: "",
       category: "",
       images: [],
     });
@@ -458,65 +473,67 @@ export default function ProductsPage() {
           </DialogHeader>
           <form onSubmit={handleSubmit}>
             <div className="grid gap-4 py-4">
-              <div className="grid gap-2">
-                <Label htmlFor="name">Nombre *</Label>
-                <Input
-                  id="name"
-                  name="name"
-                  value={newProduct.name}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="sku">SKU *</Label>
-                <Input
-                  id="sku"
-                  name="sku"
-                  value={newProduct.sku}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="price">Precio *</Label>
-                <Input
-                  id="price"
-                  name="price"
-                  type="number"
-                  value={newProduct.price}
-                  onChange={handleInputChange}
-                  required
-                  min="0"
-                  step="0.01"
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="stock">Stock *</Label>
-                <Input
-                  id="stock"
-                  name="stock"
-                  type="number"
-                  value={newProduct.stock}
-                  onChange={handleInputChange}
-                  required
-                  min="0"
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="category">Categoría *</Label>
-                <Select name="category" value={newProduct.category} onValueChange={(value) => handleInputChange({ target: { name: "category", value } } as any)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecciona una categoría" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {categories.map((category) => (
-                      <SelectItem key={category} value={category}>
-                        {category}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="name">Nombre *</Label>
+                  <Input
+                    id="name"
+                    name="name"
+                    value={newProduct.name}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="sku">SKU *</Label>
+                  <Input
+                    id="sku"
+                    name="sku"
+                    value={newProduct.sku}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="price">Precio *</Label>
+                  <Input
+                    id="price"
+                    name="price"
+                    type="number"
+                    value={newProduct.price}
+                    onChange={handleInputChange}
+                    required
+                    min="0"
+                    step="0.01"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="stock">Stock *</Label>
+                  <Input
+                    id="stock"
+                    name="stock"
+                    type="number"
+                    value={newProduct.stock}
+                    onChange={handleInputChange}
+                    required
+                    min="0"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="category">Categoría *</Label>
+                  <Select name="category" value={newProduct.category} onValueChange={(value) => handleInputChange({ target: { name: "category", value } } as any)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecciona una categoría" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories.map((category) => (
+                        <SelectItem key={category} value={category}>
+                          {category}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="description">Descripción</Label>
