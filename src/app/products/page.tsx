@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import {
   Pagination,
   PaginationContent,
@@ -208,12 +209,27 @@ const products: Product[] = [
 
 export default function ProductsPage() {
   const [isLoading, setIsLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Simular carga
   setTimeout(() => setIsLoading(false), 2000);
 
+  // Filtrar productos basado en el término de búsqueda
+  const filteredProducts = products.filter((product) =>
+    product.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="flex flex-col items-center gap-8 px-4 sm:px-6 md:px-8">
+      <div className="w-full max-w-lg">
+        <Input
+          type="search"
+          placeholder="Buscar productos..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full"
+        />
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full">
         {isLoading
           ? // Skeletons
@@ -232,7 +248,7 @@ export default function ProductsPage() {
               </Card>
             ))
           : // Cards de productos
-            products.map((product) => (
+            filteredProducts.map((product) => (
               <Card key={product.id} className="overflow-hidden">
                 <div className="relative h-[200px]">
                   <img
@@ -264,22 +280,30 @@ export default function ProductsPage() {
             ))}
       </div>
 
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious href="#" />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">1</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationEllipsis />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationNext href="#" />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
+      {!isLoading && filteredProducts.length === 0 && (
+        <div className="text-center text-gray-500">
+          No se encontraron productos que coincidan con la búsqueda
+        </div>
+      )}
+
+      {!isLoading && filteredProducts.length > 0 && (
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious href="#" />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href="#">1</PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationEllipsis />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationNext href="#" />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      )}
     </div>
   );
 }
