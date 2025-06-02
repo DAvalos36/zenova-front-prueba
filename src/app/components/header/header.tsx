@@ -18,15 +18,19 @@ const Header = (props: Props) => {
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
-            <NavigationMenuLink href="/">Home</NavigationMenuLink>
+            <NavigationMenuLink asChild>
+              <Link href="/">Inicio</Link>
+            </NavigationMenuLink>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuLink>Productos</NavigationMenuLink>
+            <NavigationMenuLink asChild>
+              <Link href="/products">Productos</Link>
+            </NavigationMenuLink>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <Link href="/login" passHref legacyBehavior>
-              <NavigationMenuLink>Iniciar sesión</NavigationMenuLink>
-            </Link>
+            <NavigationMenuLink className="bg-orange-500" asChild>
+              <Link href="/login">Iniciar sesión</Link>
+            </NavigationMenuLink>
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
