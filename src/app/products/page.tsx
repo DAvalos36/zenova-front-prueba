@@ -11,6 +11,13 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface Product {
@@ -20,7 +27,7 @@ interface Product {
   price: number;
   description: string;
   stock: number;
-  image: string;
+  images: string[];
 }
 
 const products: Product[] = [
@@ -32,7 +39,11 @@ const products: Product[] = [
     description:
       "Consola de última generación con gráficos realistas y carga ultrarrápida",
     stock: 10,
-    image: "https://picsum.photos/200/300",
+    images: [
+      "https://picsum.photos/seed/ps5-1/400/300",
+      "https://picsum.photos/seed/ps5-2/400/300",
+      "https://picsum.photos/seed/ps5-3/400/300",
+    ],
   },
   {
     id: 2,
@@ -41,7 +52,11 @@ const products: Product[] = [
     price: 499.99,
     description: "La consola Xbox más potente con 4K real y hasta 120 FPS",
     stock: 5,
-    image: "https://picsum.photos/200/300",
+    images: [
+      "https://picsum.photos/seed/xbox-1/400/300",
+      "https://picsum.photos/seed/xbox-2/400/300",
+      "https://picsum.photos/seed/xbox-3/400/300",
+    ],
   },
   {
     id: 3,
@@ -50,7 +65,11 @@ const products: Product[] = [
     price: 349.99,
     description: "Pantalla OLED de 7 pulgadas con colores vibrantes",
     stock: 15,
-    image: "https://picsum.photos/200/300",
+    images: [
+      "https://picsum.photos/seed/switch-1/400/300",
+      "https://picsum.photos/seed/switch-2/400/300",
+      "https://picsum.photos/seed/switch-3/400/300",
+    ],
   },
   {
     id: 4,
@@ -59,7 +78,11 @@ const products: Product[] = [
     price: 69.99,
     description: "Control inalámbrico con retroalimentación háptica",
     stock: 20,
-    image: "https://picsum.photos/200/300",
+    images: [
+      "https://picsum.photos/seed/ds5-1/400/300",
+      "https://picsum.photos/seed/ds5-2/400/300",
+      "https://picsum.photos/seed/ds5-3/400/300",
+    ],
   },
   {
     id: 5,
@@ -68,7 +91,11 @@ const products: Product[] = [
     price: 129.99,
     description: "Auriculares gaming profesionales con sonido envolvente 7.1",
     stock: 8,
-    image: "https://picsum.photos/200/300",
+    images: [
+      "https://picsum.photos/seed/logitech-1/400/300",
+      "https://picsum.photos/seed/logitech-2/400/300",
+      "https://picsum.photos/seed/logitech-3/400/300",
+    ],
   },
   {
     id: 6,
@@ -77,7 +104,11 @@ const products: Product[] = [
     price: 139.99,
     description: "Teclado mecánico gaming con switches Razer Green",
     stock: 12,
-    image: "https://picsum.photos/200/300",
+    images: [
+      "https://picsum.photos/seed/razer-1/400/300",
+      "https://picsum.photos/seed/razer-2/400/300",
+      "https://picsum.photos/seed/razer-3/400/300",
+    ],
   },
   {
     id: 7,
@@ -86,7 +117,11 @@ const products: Product[] = [
     price: 59.99,
     description: "La última aventura épica de Link en Hyrule",
     stock: 0,
-    image: "https://picsum.photos/200/300",
+    images: [
+      "https://picsum.photos/seed/zelda-1/400/300",
+      "https://picsum.photos/seed/zelda-2/400/300",
+      "https://picsum.photos/seed/zelda-3/400/300",
+    ],
   },
   {
     id: 8,
@@ -95,7 +130,11 @@ const products: Product[] = [
     price: 69.99,
     description: "Kratos y Atreus se enfrentan al Ragnarök",
     stock: 25,
-    image: "https://picsum.photos/200/300",
+    images: [
+      "https://picsum.photos/seed/gow-1/400/300",
+      "https://picsum.photos/seed/gow-2/400/300",
+      "https://picsum.photos/seed/gow-3/400/300",
+    ],
   },
   {
     id: 9,
@@ -104,7 +143,11 @@ const products: Product[] = [
     price: 299.99,
     description: "Silla gaming ergonómica con soporte lumbar",
     stock: 6,
-    image: "https://picsum.photos/200/300",
+    images: [
+      "https://picsum.photos/seed/chair-1/400/300",
+      "https://picsum.photos/seed/chair-2/400/300",
+      "https://picsum.photos/seed/chair-3/400/300",
+    ],
   },
   {
     id: 10,
@@ -113,7 +156,11 @@ const products: Product[] = [
     price: 799.99,
     description: "Tarjeta gráfica de última generación para gaming 4K",
     stock: 3,
-    image: "https://picsum.photos/200/300",
+    images: [
+      "https://picsum.photos/seed/rtx4080-1/400/300",
+      "https://picsum.photos/seed/rtx4080-2/400/300",
+      "https://picsum.photos/seed/rtx4080-3/400/300",
+    ],
   },
   {
     id: 11,
@@ -122,7 +169,11 @@ const products: Product[] = [
     price: 399.99,
     description: "Monitor gaming 1440p 165Hz con G-Sync",
     stock: 7,
-    image: "https://picsum.photos/200/300",
+    images: [
+      "https://picsum.photos/seed/monitor-1/400/300",
+      "https://picsum.photos/seed/monitor-2/400/300",
+      "https://picsum.photos/seed/monitor-3/400/300",
+    ],
   },
   {
     id: 12,
@@ -131,7 +182,11 @@ const products: Product[] = [
     price: 69.99,
     description: "La nueva entrega de la saga Final Fantasy",
     stock: 18,
-    image: "https://picsum.photos/200/300",
+    images: [
+      "https://picsum.photos/seed/ff16-1/400/300",
+      "https://picsum.photos/seed/ff16-2/400/300",
+      "https://picsum.photos/seed/ff16-3/400/300",
+    ],
   },
   {
     id: 13,
@@ -140,7 +195,11 @@ const products: Product[] = [
     price: 79.99,
     description: "Ratón gaming con 25.600 DPI y 8 botones programables",
     stock: 0,
-    image: "https://picsum.photos/200/300",
+    images: [
+      "https://picsum.photos/seed/mouse-1/400/300",
+      "https://picsum.photos/seed/mouse-2/400/300",
+      "https://picsum.photos/seed/mouse-3/400/300",
+    ],
   },
   {
     id: 14,
@@ -149,7 +208,11 @@ const products: Product[] = [
     price: 399.99,
     description: "PC gaming portátil compatible con Steam",
     stock: 4,
-    image: "https://picsum.photos/200/300",
+    images: [
+      "https://picsum.photos/seed/deck-1/400/300",
+      "https://picsum.photos/seed/deck-2/400/300",
+      "https://picsum.photos/seed/deck-3/400/300",
+    ],
   },
   {
     id: 15,
@@ -158,7 +221,11 @@ const products: Product[] = [
     price: 199.99,
     description: "Escritorio gaming con iluminación RGB y gestión de cables",
     stock: 9,
-    image: "https://picsum.photos/200/300",
+    images: [
+      "https://picsum.photos/seed/desk-1/400/300",
+      "https://picsum.photos/seed/desk-2/400/300",
+      "https://picsum.photos/seed/desk-3/400/300",
+    ],
   },
   {
     id: 16,
@@ -167,7 +234,11 @@ const products: Product[] = [
     price: 249.99,
     description: "Kit completo para streaming con micrófono y capture card",
     stock: 11,
-    image: "https://picsum.photos/200/300",
+    images: [
+      "https://picsum.photos/seed/kit-1/400/300",
+      "https://picsum.photos/seed/kit-2/400/300",
+      "https://picsum.photos/seed/kit-3/400/300",
+    ],
   },
   {
     id: 17,
@@ -176,7 +247,11 @@ const products: Product[] = [
     price: 29.99,
     description: "Alfombrilla gaming XL con iluminación RGB",
     stock: 30,
-    image: "https://picsum.photos/200/300",
+    images: [
+      "https://picsum.photos/seed/mousepad-1/400/300",
+      "https://picsum.photos/seed/mousepad-2/400/300",
+      "https://picsum.photos/seed/mousepad-3/400/300",
+    ],
   },
   {
     id: 18,
@@ -185,7 +260,11 @@ const products: Product[] = [
     price: 59.99,
     description: "El juego de carreras más divertido de Nintendo",
     stock: 22,
-    image: "https://picsum.photos/200/300",
+    images: [
+      "https://picsum.photos/seed/mario-kart-1/400/300",
+      "https://picsum.photos/seed/mario-kart-2/400/300",
+      "https://picsum.photos/seed/mario-kart-3/400/300",
+    ],
   },
   {
     id: 19,
@@ -194,7 +273,11 @@ const products: Product[] = [
     price: 24.99,
     description: "Soporte para auriculares con USB hub y RGB",
     stock: 15,
-    image: "https://picsum.photos/200/300",
+    images: [
+      "https://picsum.photos/seed/stand-1/400/300",
+      "https://picsum.photos/seed/stand-2/400/300",
+      "https://picsum.photos/seed/stand-3/400/300",
+    ],
   },
   {
     id: 20,
@@ -203,7 +286,11 @@ const products: Product[] = [
     price: 69.99,
     description: "La última aventura de Spider-Man en PS5",
     stock: 0,
-    image: "https://picsum.photos/200/300",
+    images: [
+      "https://picsum.photos/seed/spiderman-1/400/300",
+      "https://picsum.photos/seed/spiderman-2/400/300",
+      "https://picsum.photos/seed/spiderman-3/400/300",
+    ],
   },
 ];
 
@@ -225,7 +312,7 @@ export default function ProductsPage() {
   // Calcular el número total de páginas
   const totalPages = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE);
 
-  // Obtener los productos de la página actual
+  // Obtener los productos de la página current
   const currentProducts = filteredProducts.slice(
     (currentPage - 1) * PRODUCTS_PER_PAGE,
     currentPage * PRODUCTS_PER_PAGE
@@ -280,13 +367,23 @@ export default function ProductsPage() {
           : // Cards de productos
             currentProducts.map((product) => (
               <Card key={product.id} className="overflow-hidden">
-                <div className="relative h-[200px]">
-                  <img
-                    src="https://picsum.photos/200/300"
-                    alt={product.name}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
+                <Carousel className="w-full">
+                  <CarouselContent>
+                    {product.images.map((image, index) => (
+                      <CarouselItem key={index}>
+                        <div className="relative h-[200px]">
+                          <img
+                            src={image}
+                            alt={`${product.name} - Imagen ${index + 1}`}
+                            className="object-cover w-full h-full"
+                          />
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <CarouselPrevious className="hidden group-hover:flex" />
+                  <CarouselNext className="hidden group-hover:flex" />
+                </Carousel>
                 <CardContent className="p-4">
                   <CardTitle className="text-xl mb-2">{product.name}</CardTitle>
                   <p className="text-sm text-muted-foreground mb-1">
