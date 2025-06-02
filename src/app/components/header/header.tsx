@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { CircleCheckIcon, CircleHelpIcon, CircleIcon } from "lucide-react";
 import React from "react";
@@ -9,21 +11,34 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
+import { usePathname } from "next/navigation";
 
 type Props = {};
 
 const Header = (props: Props) => {
+  const pathname = usePathname(); // Usar usePathname en lugar de useRouter
+
+  const isActive = (path: string) => {
+    return pathname === path;
+  };
+
   return (
     <nav className="w-full flex justify-center gap-2 py-2">
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
-            <NavigationMenuLink asChild>
+            <NavigationMenuLink
+              asChild
+              className={isActive("/") ? "text-orange-500" : ""}
+            >
               <Link href="/">Inicio</Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuLink asChild>
+            <NavigationMenuLink
+              asChild
+              className={isActive("/products") ? "text-orange-500" : ""}
+            >
               <Link href="/products">Productos</Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
@@ -37,4 +52,5 @@ const Header = (props: Props) => {
     </nav>
   );
 };
+
 export default Header;
