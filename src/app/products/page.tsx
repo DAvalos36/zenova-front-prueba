@@ -117,7 +117,7 @@ const products: Product[] = [
   },
   {
     id: 11,
-    name: "Gaming Monitor 27\"",
+    name: 'Gaming Monitor 27"',
     sku: "MON-27-2024",
     price: 399.99,
     description: "Monitor gaming 1440p 165Hz con G-Sync",
@@ -207,9 +207,12 @@ const products: Product[] = [
   },
 ];
 
+const PRODUCTS_PER_PAGE = 8;
+
 export default function ProductsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Simular carga
   setTimeout(() => setIsLoading(false), 2000);
@@ -219,6 +222,30 @@ export default function ProductsPage() {
     product.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // Calcular el número total de páginas
+  const totalPages = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE);
+
+  // Obtener los productos de la página actual
+  const currentProducts = filteredProducts.slice(
+    (currentPage - 1) * PRODUCTS_PER_PAGE,
+    currentPage * PRODUCTS_PER_PAGE
+  );
+
+  // Manejar cambio de página
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  // Generar array de páginas para la paginación
+  const getPageNumbers = () => {
+    const pages = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push(i);
+    }
+    return pages;
+  };
+
   return (
     <div className="flex flex-col items-center gap-8 px-4 sm:px-6 md:px-8">
       <div className="w-full max-w-lg">
@@ -226,7 +253,10 @@ export default function ProductsPage() {
           type="search"
           placeholder="Buscar productos..."
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={(e) => {
+            setSearchTerm(e.target.value);
+            setCurrentPage(1); // Resetear a la primera página al buscar
+          }}
           className="w-full"
         />
       </div>
@@ -248,7 +278,7 @@ export default function ProductsPage() {
               </Card>
             ))
           : // Cards de productos
-            filteredProducts.map((product) => (
+            currentProducts.map((product) => (
               <Card key={product.id} className="overflow-hidden">
                 <div className="relative h-[200px]">
                   <img
@@ -290,16 +320,47 @@ export default function ProductsPage() {
         <Pagination>
           <PaginationContent>
             <PaginationItem>
-              <PaginationPrevious href="#" />
+              <PaginationPrevious
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (currentPage > 1) handlePageChange(currentPage - 1);
+                }}
+                className={
+                  currentPage === 1 ? "pointer-events-none opacity-50" : ""
+                }
+              />
             </PaginationItem>
+
+            {getPageNumbers().map((page) => (
+              <PaginationItem key={page}>
+                <PaginationLink
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handlePageChange(page);
+                  }}
+                  isActive={currentPage === page}
+                >
+                  {page}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+
             <PaginationItem>
-              <PaginationLink href="#">1</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationNext href="#" />
+              <PaginationNext
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (currentPage < totalPages)
+                    handlePageChange(currentPage + 1);
+                }}
+                className={
+                  currentPage === totalPages
+                    ? "pointer-events-none opacity-50"
+                    : ""
+                }
+              />
             </PaginationItem>
           </PaginationContent>
         </Pagination>
