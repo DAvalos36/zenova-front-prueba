@@ -411,14 +411,25 @@ export default function ProductsPage() {
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files) {
-      const imageUrls = Array.from(files).map((file) =>
-        URL.createObjectURL(file)
-      );
+      const imageUrls = Array.from(files).map((file) => ({
+        url: URL.createObjectURL(file),
+        name: file.name
+      }));
       setNewProduct((prev) => ({
         ...prev,
-        images: [...(prev.images || []), ...imageUrls],
+        images: [...prev.images, ...imageUrls.map(img => img.url)],
       }));
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     }
+  };
+
+  const handleRemoveImage = (indexToRemove: number) => {
+    setNewProduct((prev) => ({
+      ...prev,
+      images: prev.images.filter((_, index) => index !== indexToRemove),
+    }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -559,12 +570,21 @@ export default function ProductsPage() {
                 {newProduct.images && newProduct.images.length > 0 && (
                   <div className="flex gap-2 mt-2 overflow-x-auto">
                     {newProduct.images.map((image, index) => (
-                      <img
-                        key={index}
-                        src={image}
-                        alt={`Preview ${index + 1}`}
-                        className="w-20 h-20 object-cover rounded"
-                      />
+                      <div key={index} className="relative group">
+                        <img
+                          src={image}
+                          alt={`Preview ${index + 1}`}
+                          className="w-20 h-20 object-cover rounded"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveImage(index)}
+                          className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+                          aria-label="Eliminar imagen"
+                        >
+                          ×
+                        </button>
+                      </div>
                     ))}
                   </div>
                 )}
