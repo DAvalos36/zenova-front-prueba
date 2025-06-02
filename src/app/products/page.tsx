@@ -432,15 +432,39 @@ export default function ProductsPage() {
     }));
   };
 
+  const isFormValid = () => {
+    return (
+      newProduct.name.trim() !== "" &&
+      newProduct.sku.trim() !== "" &&
+      newProduct.price !== "" &&
+      parseFloat(newProduct.price) > 0 &&
+      newProduct.stock !== "" &&
+      parseInt(newProduct.stock) >= 0 &&
+      newProduct.category !== "" &&
+      newProduct.images.length > 0
+    );
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Convertir los valores string a number para price y stock
+    
     const productToSave: Partial<Product> = {
       ...newProduct,
       price: parseFloat(newProduct.price) || 0,
       stock: parseInt(newProduct.stock) || 0,
     };
-    console.log("Nuevo producto:", productToSave);
+
+    console.group("Información del Nuevo Producto");
+    console.log("Nombre:", productToSave.name);
+    console.log("SKU:", productToSave.sku);
+    console.log("Precio:", productToSave.price);
+    console.log("Stock:", productToSave.stock);
+    console.log("Categoría:", productToSave.category);
+    console.log("Descripción:", productToSave.description);
+    console.log("Número de imágenes:", productToSave.images?.length);
+    console.log("URLs de imágenes:", productToSave.images);
+    console.groupEnd();
+
     setDialogOpen(false);
     setNewProduct({
       name: "",
@@ -591,7 +615,13 @@ export default function ProductsPage() {
               </div>
             </div>
             <DialogFooter>
-              <Button type="submit">Guardar Producto</Button>
+              <Button 
+                type="submit" 
+                disabled={!isFormValid()}
+                className={!isFormValid() ? "opacity-50 cursor-not-allowed" : ""}
+              >
+                Guardar Producto
+              </Button>
             </DialogFooter>
           </form>
         </DialogContent>
