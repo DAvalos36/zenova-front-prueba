@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
@@ -300,6 +300,8 @@ export default function ProductsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [hoveredCardId, setHoveredCardId] = useState<number | null>(null);
+  const carouselApis = useRef<{ [key: number]: any }>({});
 
   // Simular carga
   setTimeout(() => setIsLoading(false), 2000);
@@ -332,6 +334,30 @@ export default function ProductsPage() {
     }
     return pages;
   };
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+
+    if (hoveredCardId !== null) {
+      interval = setInterval(() => {
+        const api = carouselApis.current[hoveredCardId];
+        if (api && !api.scrollSnapList().length) {
+          api.reInit();
+        }
+        if (api?.canScrollNext()) {
+          api.scrollNext();
+        } else {
+          api.scrollTo(0);
+        }
+      }, 1500);
+    }
+
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [hoveredCardId]);
 
   return (
     <div className="flex flex-col items-center gap-8 px-4 sm:px-6 md:px-8">
@@ -366,8 +392,24 @@ export default function ProductsPage() {
             ))
           : // Cards de productos
             currentProducts.map((product) => (
-              <Card key={product.id} className="overflow-hidden">
-                <Carousel className="w-full">
+              <Card
+                key={product.id}
+                className="overflow-hidden"
+                onMouseEnter={() => setHoveredCardId(product.id)}
+                onMouseLeave={() => setHoveredCardId(null)}
+              >
+                <Carousel
+                  className="w-full group"
+                  opts={{
+                    align: "start",
+                    loop: true,
+                  }}
+                  setApi={(api) => {
+                    if (api) {
+                      carouselApis.current[product.id] = api;
+                    }
+                  }}
+                >
                   <CarouselContent>
                     {product.images.map((image, index) => (
                       <CarouselItem key={index}>
