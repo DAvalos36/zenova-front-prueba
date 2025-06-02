@@ -20,8 +20,11 @@ export function LoginForm({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Email:", email);
-    console.log("Contraseña:", password);
+    console.log('Datos del login:');
+    console.log('==================');
+    console.log('Email:', email);
+    console.log('Contraseña:', password);
+    console.log('==================');
   };
 
   return (
@@ -57,7 +60,11 @@ export function LoginForm({
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
-                <Button type="submit" className="w-full">
+                <Button 
+                  type="submit" 
+                  className="w-full"
+                  disabled={!email || !password}
+                >
                   Iniciar sesión
                 </Button>
               </div>
