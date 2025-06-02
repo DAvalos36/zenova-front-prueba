@@ -19,6 +19,24 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 
 interface Product {
   id: number;
@@ -28,6 +46,7 @@ interface Product {
   description: string;
   stock: number;
   images: string[];
+  category?: string;
 }
 
 const products: Product[] = [
@@ -296,11 +315,31 @@ const products: Product[] = [
 
 const PRODUCTS_PER_PAGE = 8;
 
+const categories = [
+  "Consolas",
+  "Videojuegos",
+  "Accesorios",
+  "Periféricos",
+  "Hardware",
+  "Otros",
+];
+
 export default function ProductsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [hoveredCardId, setHoveredCardId] = useState<number | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [newProduct, setNewProduct] = useState<Partial<Product>>({
+    name: "",
+    sku: "",
+    price: 0,
+    description: "",
+    stock: 0,
+    category: "",
+    images: [],
+  });
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const carouselApis = useRef<{ [key: number]: any }>({});
 
   // Simular carga
@@ -359,19 +398,181 @@ export default function ProductsPage() {
     };
   }, [hoveredCardId]);
 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files) {
+      const imageUrls = Array.from(files).map((file) =>
+        URL.createObjectURL(file)
+      );
+      setNewProduct((prev) => ({
+        ...prev,
+        images: [...(prev.images || []), ...imageUrls],
+      }));
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Aquí iría la lógica para guardar el producto
+    console.log("Nuevo producto:", newProduct);
+    setDialogOpen(false);
+    setNewProduct({
+      name: "",
+      sku: "",
+      price: 0,
+      description: "",
+      stock: 0,
+      category: "",
+      images: [],
+    });
+  };
+
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const { name, value } = e.target;
+    setNewProduct((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   return (
-    <div className="flex flex-col items-center gap-8 px-4 sm:px-6 md:px-8">
-      <div className="w-full max-w-lg">
-        <Input
-          type="search"
-          placeholder="Buscar productos..."
-          value={searchTerm}
-          onChange={(e) => {
-            setSearchTerm(e.target.value);
-            setCurrentPage(1); // Resetear a la primera página al buscar
-          }}
-          className="w-full"
-        />
+    <div className="container mx-auto px-4 py-8">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Catálogo de Productos</h1>
+        <Button onClick={() => setDialogOpen(true)} className="bg-primary">
+          Agregar Producto
+        </Button>
+      </div>
+
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Agregar Nuevo Producto</DialogTitle>
+            <DialogDescription>
+              Ingresa los detalles del nuevo producto. Los campos marcados con * son obligatorios.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleSubmit}>
+            <div className="grid gap-4 py-4">
+              <div className="grid gap-2">
+                <Label htmlFor="name">Nombre *</Label>
+                <Input
+                  id="name"
+                  name="name"
+                  value={newProduct.name}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="sku">SKU *</Label>
+                <Input
+                  id="sku"
+                  name="sku"
+                  value={newProduct.sku}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="price">Precio *</Label>
+                <Input
+                  id="price"
+                  name="price"
+                  type="number"
+                  value={newProduct.price}
+                  onChange={handleInputChange}
+                  required
+                  min="0"
+                  step="0.01"
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="stock">Stock *</Label>
+                <Input
+                  id="stock"
+                  name="stock"
+                  type="number"
+                  value={newProduct.stock}
+                  onChange={handleInputChange}
+                  required
+                  min="0"
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="category">Categoría *</Label>
+                <Select name="category" value={newProduct.category} onValueChange={(value) => handleInputChange({ target: { name: "category", value } } as any)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecciona una categoría" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categories.map((category) => (
+                      <SelectItem key={category} value={category}>
+                        {category}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="description">Descripción</Label>
+                <Textarea
+                  id="description"
+                  name="description"
+                  value={newProduct.description}
+                  onChange={handleInputChange}
+                  rows={3}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="images">Imágenes</Label>
+                <Input
+                  id="images"
+                  name="images"
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handleImageUpload}
+                  ref={fileInputRef}
+                />
+                {newProduct.images && newProduct.images.length > 0 && (
+                  <div className="flex gap-2 mt-2 overflow-x-auto">
+                    {newProduct.images.map((image, index) => (
+                      <img
+                        key={index}
+                        src={image}
+                        alt={`Preview ${index + 1}`}
+                        className="w-20 h-20 object-cover rounded"
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="submit">Guardar Producto</Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      <div className="w-full max-w-6xl flex flex-col sm:flex-row gap-4 items-center justify-between">
+        <div className="w-full sm:w-96">
+          <Input
+            type="search"
+            placeholder="Buscar productos..."
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="w-full"
+          />
+        </div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full">
         {isLoading
