@@ -11,6 +11,7 @@ export function RegisterForm({
   onToggle,
   ...props
 }: React.ComponentProps<"div"> & { onToggle: () => void }) {
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -29,6 +30,7 @@ export function RegisterForm({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (password === confirmPassword) {
+      console.log("Nombre completo:", fullName);
       console.log("Email:", email);
       console.log("Contraseña:", password);
     }
@@ -68,6 +70,17 @@ export function RegisterForm({
           <form onSubmit={handleSubmit}>
             <div className="grid gap-6">
               <div className="grid gap-6">
+                <div className="grid gap-3">
+                  <Label htmlFor="fullName">Nombre completo</Label>
+                  <Input
+                    id="fullName"
+                    type="text"
+                    placeholder="Juan Pérez"
+                    required
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                  />
+                </div>
                 <div className="grid gap-3">
                   <Label htmlFor="email">Email</Label>
                   <Input
@@ -112,7 +125,11 @@ export function RegisterForm({
                   type="submit"
                   className="w-full"
                   disabled={
-                    !passwordsMatch || !password || !confirmPassword || !email
+                    !passwordsMatch ||
+                    !password ||
+                    !confirmPassword ||
+                    !email ||
+                    !fullName
                   }
                 >
                   Registrarse
