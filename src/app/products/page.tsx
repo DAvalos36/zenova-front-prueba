@@ -413,14 +413,14 @@ export default function ProductsPage() {
     if (files) {
       const imageUrls = Array.from(files).map((file) => ({
         url: URL.createObjectURL(file),
-        name: file.name
+        name: file.name,
       }));
       setNewProduct((prev) => ({
         ...prev,
-        images: [...prev.images, ...imageUrls.map(img => img.url)],
+        images: [...prev.images, ...imageUrls.map((img) => img.url)],
       }));
       if (fileInputRef.current) {
-        fileInputRef.current.value = '';
+        fileInputRef.current.value = "";
       }
     }
   };
@@ -447,7 +447,7 @@ export default function ProductsPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const productToSave: Partial<Product> = {
       ...newProduct,
       price: parseFloat(newProduct.price) || 0,
@@ -503,7 +503,8 @@ export default function ProductsPage() {
           <DialogHeader>
             <DialogTitle>Agregar Nuevo Producto</DialogTitle>
             <DialogDescription>
-              Ingresa los detalles del nuevo producto. Los campos marcados con * son obligatorios.
+              Ingresa los detalles del nuevo producto. Los campos marcados con *
+              son obligatorios.
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto pr-2">
@@ -556,7 +557,15 @@ export default function ProductsPage() {
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="category">Categoría *</Label>
-                  <Select name="category" value={newProduct.category} onValueChange={(value) => handleInputChange({ target: { name: "category", value } } as any)}>
+                  <Select
+                    name="category"
+                    value={newProduct.category}
+                    onValueChange={(value) =>
+                      handleInputChange({
+                        target: { name: "category", value },
+                      } as any)
+                    }
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Selecciona una categoría" />
                     </SelectTrigger>
@@ -615,10 +624,12 @@ export default function ProductsPage() {
               </div>
             </div>
             <DialogFooter>
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 disabled={!isFormValid()}
-                className={!isFormValid() ? "opacity-50 cursor-not-allowed" : ""}
+                className={
+                  !isFormValid() ? "opacity-50 cursor-not-allowed" : ""
+                }
               >
                 Guardar Producto
               </Button>
@@ -627,7 +638,7 @@ export default function ProductsPage() {
         </DialogContent>
       </Dialog>
 
-      <div className="w-full max-w-6xl flex flex-col sm:flex-row gap-4 items-center justify-between">
+      <div className="w-full max-w-6xl flex flex-col sm:flex-row gap-4 items-center justify-between mb-4">
         <div className="w-full sm:w-96">
           <Input
             type="search"
