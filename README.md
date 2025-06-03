@@ -1,36 +1,84 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Zenova Frontend - Prueba Técnica
 
-## Getting Started
+Una aplicación web moderna desarrollada como prueba técnica, construida con Next.js, Tailwind CSS y shadcn/ui.
 
-First, run the development server:
+## 🎯 Información del Proyecto
+
+Proyecto desarrollado por **David Avalos** como prueba técnica demostrando el uso de tecnologías modernas de frontend.
+
+**GitHub:** [@DAvalos36](https://github.com/DAvalos36)
+
+## 🚀 Stack Tecnológico
+
+- **Next.js** - Framework de React con SSR/SSG
+- **TypeScript** - Type safety y mejor DX
+- **Tailwind CSS** - Framework CSS utility-first
+- **shadcn/ui** - Componentes UI accesibles con Radix UI
+- **Orval** - Generación automática de clientes API desde OpenAPI specs
+- **pnpm** - Gestor de paquetes rápido y eficiente
+
+## ✨ Características Implementadas
+
+- ✅ Arquitectura escalable con Next.js App Router
+- ✅ Diseño responsivo mobile-first
+- ✅ Componentes reutilizables y accesibles
+- ✅ TypeScript para desarrollo type-safe
+- ✅ Optimización de rendimiento
+- ✅ Integración automática de APIs con Orval
+- ✅ Gestión eficiente de dependencias con pnpm
+
+## 🛠️ Instalación Rápida
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+# Clonar repositorio
+git clone https://github.com/DAvalos36/zenova-front-prueba.git
+cd zenova-front-prueba
+
+# Instalar dependencias con pnpm (recomendado)
+pnpm install
+
+# Configurar variables de entorno
+cp .env.example .env.local
+
+# Ejecutar en desarrollo
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Aplicación disponible en http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📸 Capturas del Proyecto
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+<!-- Agregar aquí las 4 imágenes de ejemplo del sitio -->
 
-## Learn More
+![Página Principal](https://i.ibb.co/gLdfzDMZ/Captura-de-pantalla-2025-06-03-a-la-s-2-38-31-a-m.png)
+_Página principal con diseño responsivo_
 
-To learn more about Next.js, take a look at the following resources:
+![Busqueda](https://i.ibb.co/Sw164KDP/Captura-de-pantalla-2025-06-03-a-la-s-2-38-07-a-m.png)
+_Panel de Busqueda_
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+![Registro](https://i.ibb.co/JwkCZF3w/Captura-de-pantalla-2025-06-03-a-la-s-2-36-49-a-m.png)
+_Registro_
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+![Vista Mobile](https://i.ibb.co/Df2JMwdz/Captura-de-pantalla-2025-06-03-a-la-s-2-53-44-a-m.png)
+_Diseño optimizado para dispositivos móviles_
 
-## Deploy on Vercel
+## 📝 Scripts Disponibles
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `pnpm dev` - Servidor de desarrollo
+- `pnpm build` - Build para producción
+- `pnpm start` - Servidor de producción
+- `pnpm lint` - Ejecutar ESLint
+- `pnpm orval` - Generar clientes API desde OpenAPI specs
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🚀 Despliegue
+
+Compatible con:
+
+- **Vercel** (Recomendado para Next.js)
+- Netlify
+- Railway
+- Digital Ocean
+
+---
+
+**Desarrollado por David Avalos** | [GitHub: @DAvalos36](https://github.com/DAvalos36)
